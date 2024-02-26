@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Text, View } from "react-native";
 
 const FoodApi = () => {
     const [name, setName] = useState('');
@@ -64,8 +65,8 @@ const FoodApi = () => {
 
     return (
         <>
-            <div className="box">
-                <h3>선택 재료 :</h3>
+            <View>
+                <Text>선택 재료 :</Text>
                 <ul>
                     {clickedNames.map((name, index) => (
                         <li key={index}>
@@ -74,10 +75,10 @@ const FoodApi = () => {
                         </li>
                     ))}
                 </ul>
-            </div>
+            </View>
 
-            <div className="serach">
-                <label>식품</label>
+            <View>
+                <Text>식품</Text>
                 <input type="text" onChange={onChangeHandler} />
                 <button onClick={findGroupName}>검색</button>
                 <h3>{name}</h3>
@@ -89,7 +90,7 @@ const FoodApi = () => {
                         ))}
                     </ul>
                 ) : null}
-            </div>
+            </View>
 
         </>
     );
