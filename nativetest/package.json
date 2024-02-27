@@ -9,11 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.14",
     "@react-navigation/native": "^6.1.12",
+    "@react-navigation/native-stack": "^6.9.20",
     "expo": "~49.0.15",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
-    "react-native": "0.72.6"
+    "react-native": "0.72.6",
+    "react-native-dropdown-picker": "^5.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
