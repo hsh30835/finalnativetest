@@ -7,6 +7,8 @@ const SearchName = () => {
     const [name, setName] = useState('');
     const [groupNames, setGroupNames] = useState([]); //여러 데이터를 담기위해 배열로 만듬
     const [clickedNames, setClickedNames] = useState([]);
+    const [onButtonClicked, setOnButtonClicked] = useState();
+    const [recommendedNames, setRecommendedNames] = useState([]);
 
     const FindGroupName = () => {
         const apiUrl = `http://openapi.foodsafetykorea.go.kr/api/0e28c65abe314f1c9981/I2790/json/1/20/DESC_KOR=${name},`
@@ -15,7 +17,6 @@ const SearchName = () => {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                // 출력을 10개까지만 이 값은 배열이니깐 index[9]번까지 출력?
                 if (data && data.I2790 && data.I2790.row && data.I2790.row.length > 0) {
                     const sortedRows = data.I2790.row.sort((a, b) => a.DESC_KOR.length - b.DESC_KOR.length);
                     const names = sortedRows.map(item => `${"이름 : " + item.DESC_KOR} ${"칼로리 : " + item.NUTR_CONT1}`); // 리스트 뽑는 곳 
@@ -51,40 +52,34 @@ const SearchName = () => {
             });
     }
 
+    // 요청 보내는 곳
     const OnChangeHandler = (text) => {
         setName(text); // 요청시 뒤에 ,붙임
     };
 
-    // 리스트 클릭시 재료박스 공간으로 이동
-    // 이동하면 이름 옆에 x있고 누르면 삭제
+    // 리스트 클릭시 재료박스에 담는 곳
     const ListClickHandler = (clickedName) => {
         console.log(clickedName);
+        if (!clickedNames.includes(clickedName)) { // 이미 선택된 항목이 아닌 경우에만 추가합니다.
         setClickedNames(prevClickedNames => [...prevClickedNames, clickedName]);
+    }
     };
 
+    // 버튼 클릭시 재료박스에 담는 곳
+    const handleRecommendations = (recommendedNames) => {
+        console.log("데이터 : " + recommendedNames)
+        setRecommendedNames(recommendedNames);
+    };
 
-
-    const removeItem = (nameToRemove) => {
-        setClickedNames(prevClickedNames => prevClickedNames.filter(name => name !== nameToRemove));
-    }
+    // 버튼은 보통 한번만 처리되기 때문에 조건을 걸 이유가 없음
 
     return (
         <>
             <View>
-                <Text>선택 재료 :</Text>
-                <FlatList
-                    data={clickedNames}
-                    renderItem={({ item }) => (
-                        <View>
-                            <Text>{item}</Text>
-                            <IngredientsBasket clickedName={item} removeItem={removeItem} />
-                        </View>
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
-                />
+            <IngredientsBasket clickedNames={clickedNames} setClickedNames={setClickedNames} recommendedNames={recommendedNames} setRecommendedNames={setRecommendedNames} />
             </View>
             <View>
-                <RecommendButton/>
+            <RecommendButton onButtonClicked={handleRecommendations} />
             </View>
             <View>
                 <Text>식품</Text>
